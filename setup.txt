@@ -1,0 +1,41 @@
+1. Run 'bundle install'
+
+2. Create mirgrations for the tables you want: 
+'rake db:create_migration NAME=create_teams' 
+'rake db:create_migration NAME=create_players'
+
+This will create a migrate folder inside the db folder and will contain your migrations. 
+
+3. Add setup code inside each migration to build out the tables you want. Then run 
+'rake db:migrate' to run the migrations. This will create a schema.rb file where you 
+can look at the structure of your tables. 
+
+4. Create a models folder inside the app folder and create a Ruby file for each model that you 
+want. In this project we will have team.rb and player.rb files. Each file can start as an 
+empty class that inherits from ActiveRecord::Base
+Then add the relationships inside each class. The Team class will have the following line 
+inside it: 'has_many :players' and the Player class will have the following line inside it:
+'belongs_to :team' 
+
+5. Use 'rake console' to open a pry session and test out if you can create objects. Note don't use .create method yet, we 
+don't want to add anything to the database at this point. Just try 'Player.new' and 'Team.new' and it should make 
+objects with all nil values. 
+
+6. Add your seed data to the seeds.rb file. If you want to use Faker for this, make sure you add Faker to 
+your Gemfile and install it. Once you have your seed data, run this command:
+'rake db:seed'
+This will create a development.sqlite3 database with the values from your seed file. You can use the SQLite vs code 
+extension to see what is in the tables you created. 
+
+Run 'rake console' to open a pry session and try entering 'Player.all' and 'Team.all' to also see the data that is 
+now in the database. 
+
+In examples I have seen before, the seed file would include lines to destroy all model instances before making new ones- this is 
+so that if you run 'rake db:seed' again it will first delete everything in the database before re-seeding. It did this by adding 
+lines at the top of the file like this: 'Team.destroy_all' and 'Player.destroy_all'. I was having issue re-seeding the database 
+so I ended up having to just delete the development.sqlite3 file and then running 'rake db:migrate' and 'rake db:seed' again 
+and this seems to work fine. 
+
+
+7. Start adding routes in application.rb and testing them by running the command 'shotgun' in the console to start a local server
+and then use Hopscotch or Postman to test making requests to your backend. 
